@@ -8,7 +8,7 @@ import 'package:storemap/presentation/screens/settings_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  State<MainScreen> createState() => _MainScreenState();//crea el nav y la posciona por encima de todas las screen
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -17,16 +17,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
+      child: Scaffold(//scaffold es una pantalla
         bottomNavigationBar: BotonNavegacion(
-          onTabSelected: (index) {
-            setState(() {
+          onTabSelected: (index) {//ontab viene de botonNavegation y resive el estado
+            setState(() {//actuliza el estado
               selectedIndex = index;
             });
           },
         ),
         body: IndexedStack(
-          index: selectedIndex,
+          index: selectedIndex,//cada vez que selecccione me actuliza el index y trae el nuevo screan
           children: <Widget>[
             const FirstScreen(),
             const ProductsScreen(),

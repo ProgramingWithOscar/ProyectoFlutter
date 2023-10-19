@@ -12,6 +12,6 @@ class AppTheme {
       // brightness: isDarkMode ? Brightness.dark : Brightness.light,
       colorSchemeSeed: colors[selectedColor],
       appBarTheme: const AppBarTheme(
-        centerTitle: true,
+        centerTitle: true,//cemtra los titulos de los appbar
       ));
 }
