@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class ContainerWidget extends StatelessWidget {
@@ -14,42 +15,44 @@ class ContainerWidget extends StatelessWidget {
       onTap: onTap,
       child: Center(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(20),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.7),
+                  color: Colors.grey.withOpacity(1),
                   spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 0),
+                  blurRadius: 9,
+                  offset: const Offset(0, 0),
                 ),
               ],
             ),
-            width: 200,
-            height: 200,
-            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            width: 120,
+            height: 120,
+            margin: const EdgeInsets.symmetric( horizontal: 10),
             child: Stack(
               children: [
                 Image.asset(
                   url,
                   fit: BoxFit.cover,
-                  width: 200,
-                  height: 200,
+                  width: 120,
+                  height: 120,
                 ),
                 Positioned(
                   bottom: 0,
                   left: 0,
                   right: 0,
                   child: Container(
-                    color: Colors.white.withOpacity(0.8),
-                    child: Text(
-                      name,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                    color: Colors.white.withOpacity(0.6),
+                    child: Center(
+                      child: Text(
+                        name,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

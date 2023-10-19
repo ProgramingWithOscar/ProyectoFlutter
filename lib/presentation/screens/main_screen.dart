@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
         body: IndexedStack(
           index: selectedIndex,
           children: <Widget>[
-            const FisrtScreen(),
+            const FirstScreen(),
             const ProductsScreen(),
             const MapScreen(),
             const ProfileScreen(),

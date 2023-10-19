@@ -1,123 +1,138 @@
 import 'package:flutter/material.dart';
 
-class RegisterScreen extends StatefulWidget {
+import 'package:storemap/Comm/genLoginSignupHeader.dart';
+import 'package:storemap/Comm/genTextFormField.dart';
+import 'package:storemap/database/database_helper.dart';
+import 'package:storemap/entities/users.dart';
+
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  // ignore: library_private_types_in_public_api
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final List<String> rol = ["Emprendedor", "Comprador"];
+class _SignupPageState extends State<SignupPage> {
+  Future<void> mostrarUsuariosRegistrados() async {
+    final List<UserModel> usuarios = await DB.getUsers();
+    for (final usuario in usuarios) {
+      print(
+          'id: ${usuario.id}, name: ${usuario.name}, email: ${usuario.email}');
+    }
+  }
 
-  String? selectedRol;
+  final _formKey = GlobalKey<FormState>();
 
-  // Define una clase llamada RegisterScreen que extiende StatelessWidget.
+  final _conUserId = TextEditingController();
+  final _conUserName = TextEditingController();
+  final _conEmail = TextEditingController();
+  final _conPassword = TextEditingController();
+  final _conCPassword = TextEditingController();
+
+  List<UserModel> users = [];
+
+  @override
+  void dispose() {
+    _conUserId.dispose();
+
+    super.dispose();
+  }
+  // ignore: prefer_typing_uninitialized_variables
+
   @override
   Widget build(BuildContext context) {
-    // Método para construir la interfaz de RegisterScreen.
-    TextEditingController registerEmailController =
-        TextEditingController(); // Controlador para el correo electrónico de registro.
-    TextEditingController registerPasswordController =
-        TextEditingController(); // Controlador para la contraseña de registro.
-    TextEditingController registerUserController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registro'),
+        title: const Text('Login with Signup'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'assets/images/register.png',
-              height: 100,
-            ),
-            SizedBox(
-              width: 250,
-              child: TextField(
-                controller: registerUserController,
-                decoration: const InputDecoration(labelText: 'Nombre'),
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  genLoginSignupHeader('Signup'),
+                  getTextFormField(
+                      controller: _conUserId,
+                      icon: Icons.person,
+                      hintName: 'User ID'),
+                  const SizedBox(height: 10.0),
+                  getTextFormField(
+                      controller: _conUserName,
+                      icon: Icons.person_outline,
+                      inputType: TextInputType.name,
+                      hintName: 'User Name'),
+                  const SizedBox(height: 10.0),
+                  getTextFormField(
+                      controller: _conEmail,
+                      icon: Icons.email,
+                      inputType: TextInputType.emailAddress,
+                      hintName: 'Email'),
+                  const SizedBox(height: 10.0),
+                  getTextFormField(
+                    controller: _conPassword,
+                    icon: Icons.lock,
+                    hintName: 'Password',
+                    isObscureText: true,
+                  ),
+                  const SizedBox(height: 10.0),
+                  getTextFormField(
+                    controller: _conCPassword,
+                    icon: Icons.lock,
+                    hintName: 'Confirm Password',
+                    isObscureText: true,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(30.0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final nameEntered = _conUserName.text;
+                        final registerEmail = _conEmail.text;
+                        // Obtiene el correo electrónico ingresado.
+                        final registerPassword = _conPassword.text;
+                        // Obtiene la contraseña ingresada.
+                        final usuario = UserModel(
+                            name: nameEntered,
+                            email: registerEmail,
+                            password: registerPassword);
+                        final insertedRows = await DB.insert(usuario);
+                        if (insertedRows > 0) {
+                          Navigator.pop(context,
+                              usuario); // Cierra la pantalla de registro y devuelve los datos al estado anterior.
+                          mostrarUsuariosRegistrados();
+                        } else {
+                          // Error: no se pudo insertar el usuario en la base de datos.
+                          // Puedes mostrar un mensaje de error al usuario.
+                        }
+                      },
+                      child: const Text(
+                        'Signup',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    const Text('Does you have account? '),
+                    ElevatedButton(
+                      child: const Text('Sign In'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ])
+                ],
               ),
             ),
-            SizedBox(
-              width: 250,
-              child: TextField(
-                controller: registerEmailController,
-                decoration:
-                    const InputDecoration(labelText: 'Correo Electrónico'),
-              ),
-            ),
-            SizedBox(
-              width: 250,
-              child: TextField(
-                controller: registerPasswordController,
-                decoration: const InputDecoration(labelText: 'Contraseña'),
-                obscureText: true, // Oculta el texto de la contraseña.
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Rol de usuario:',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-                width: 250,
-                child: DropdownButton(
-                  onChanged: (value) {
-                    setState(() {
-                      selectedRol = value;
-                    });
-                  },
-                  value: selectedRol,
-                  items: rol.map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                )),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                final registerEmail = registerEmailController
-                    .text; // Obtiene el correo electrónico ingresado.
-                final registerPassword = registerPasswordController.text;
-                final registerName = registerUserController.text;
-                // Obtiene la contraseña ingresada.
-                // Cierra la pantalla de registro y devuelve los datos al estado anterior.
-                if (registerEmail != '' &&
-                    registerPassword != '' &&
-                    registerName != '' && selectedRol != '') {
-                  final result = {
-                    'email': registerEmail,
-                    'password': registerPassword,
-                    'name': registerName,
-                    'rol': selectedRol
-                  }; // Crea un mapa con los datos de registro.
-                  Navigator.pop(context, result);
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Campos vacios'),
-                        content: const Text(
-                            'Debe llenar todos los campos, intente nuevamente'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('Cerrar'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              },
-              child: const Text('Registrarse'),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -18,7 +18,7 @@ class BotonNavegacion extends StatefulWidget {
 class BotonNavegacionState extends State<BotonNavegacion> {
   int selectedIndex = 0;
   final List<Widget> pages = <Widget>[
-    const FisrtScreen(),
+    const FirstScreen(),
     const ProductsScreen(),
     const MapScreen(),
     const ProfileScreen(),

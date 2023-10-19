@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ConfiguracionScreen extends StatelessWidget {
-  const ConfiguracionScreen({super.key});
+  const ConfiguracionScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class ConfiguracionScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             const Text(
               'Opciones de Configuración',
               style: TextStyle(
@@ -35,6 +35,19 @@ class ConfiguracionScreen extends StatelessWidget {
               },
             ),
             const Divider(),
+            ListTile(
+              leading: const Icon(Icons.light_mode_outlined),
+              title: const Text('Activar Dark mode'),
+              trailing: Switch(
+                value: false,
+                onChanged: (value){
+
+                },
+              ),
+              onTap: () {
+                // Navegar a una pantalla relacionada con la activación del modo oscuro si es necesario.
+              },
+            ),
             // Agrega más opciones de configuración aquí
           ],
         ),
@@ -44,7 +57,7 @@ class ConfiguracionScreen extends StatelessWidget {
 }
 
 class EditarCuentaScreen extends StatelessWidget {
-  const EditarCuentaScreen({super.key});
+  const EditarCuentaScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {

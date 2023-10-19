@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:storemap/database/cards_json.dart';
+import 'package:storemap/presentation/containers/cards.dart';
 import 'package:storemap/presentation/containers/my_appbar.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -15,7 +17,7 @@ class ProductsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ContainerWidget(
                   url:
-                      'https://images.pexels.com/photos/802024/pexels-photo-802024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+                      'https://images.pexels.com/photos/15818982/pexels-photo-15818982/free-photo-of-mano-comida-fotografia-de-comida-espacio-para-texto.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
                   fi: BoxFit.cover  
                       ),
             ),
@@ -35,31 +37,11 @@ class ProductsScreen extends StatelessWidget {
             Expanded(
               child: ListView(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ContainerWidget(
-                      url:
-                          'https://images.pexels.com/photos/802024/pexels-photo-802024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                      fi: BoxFit.cover,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ContainerWidget(
-                      url:
-                          'https://images.pexels.com/photos/802024/pexels-photo-802024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                      fi: BoxFit.cover,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ContainerWidget(
-                      url:
-                          'https://images.pexels.com/photos/802024/pexels-photo-802024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                      fi: BoxFit.cover,
-                    ),
-                  ),
-                
+                    ...productosComidasRapidas.map((product) => CardType1(
+                    name: product['name'],
+                    stars: product['stars'].toString(),
+                    url: product['url'],
+                    price: product['precio'],))
                 ],
                 scrollDirection: Axis.vertical,
               ),
@@ -78,13 +60,16 @@ class ContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      width: MediaQuery.of(context).size.width,
-      height: 200,
-      child: Image.network(
-        url,
-        fit: fi,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        color: Colors.black,
+        width: MediaQuery.of(context).size.width,
+        height: 200,
+        child: Image.network(
+          url,
+          fit: fi,
+        ),
       ),
     );
   }

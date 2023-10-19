@@ -1,30 +1,32 @@
-import 'package:flutter/material.dart'; // Importa la librería Flutter
+import 'package:flutter/material.dart';
 import 'package:storemap/presentation/screens/auth_screen.dart';
+import 'package:storemap/presentation/screens/fisrt_screen.dart';
+import 'package:storemap/presentation/screens/main_screen.dart';
+
 import 'package:storemap/presentation/screens/register_screen.dart';
+import 'package:storemap/theme/app_theme.dart';
 
 void main() {
-  runApp(
-      MyApp()); // Llama a la función runApp para iniciar la aplicación Flutter.
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // Define una clase llamada MyApp que extiende StatelessWidget.
   @override
   Widget build(BuildContext context) {
-    // Define el método build para construir la interfaz de la aplicación.
     return MaterialApp(
-        title: 'Store Map', // Título de la aplicación.
-        theme: ThemeData(
-          // brightness: Brightness.dark,
-          useMaterial3: true,
-          primarySwatch: Colors
-              .blue, // Configura el tema de la aplicación con un color azul.
-        ),
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/', // Ruta inicial de la aplicación.
-        routes: {
-          '/': (context) => RegisterScreen(), // Define una ruta llamada '/' que muestra AuthScreen.
-          // '/register': (context) => RegisterScreen(),
-        });
+      title: 'Store Map',
+      /**
+       * theme recibe una clase personalizada llamada appTheme que retorna un ThemeData, lo cual 
+       * nos proporciona los temas de la aplicacion mediante un metodo .getTheme()
+       */ 
+      theme: AppTheme(selectedColor: 0).getTheme(),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      // Rutas de la aplicacion
+      routes: {
+        '/': (context) => MainScreen(),
+        '/register': (context) => SignupPage(),
+      },
+    );
   }
 }
