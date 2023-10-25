@@ -3,6 +3,7 @@ import 'package:storemap/database/cards_json.dart';
 import 'package:storemap/presentation/containers/cards.dart';
 import 'package:storemap/presentation/containers/container_widget.dart';
 import 'package:storemap/presentation/containers/my_appbar.dart';
+import 'package:storemap/presentation/slider/food_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FirstScreen extends StatelessWidget {
@@ -114,6 +115,7 @@ class FirstScreen extends StatelessWidget {
                 height: 20,
               ),
               ListView(
+                
                 physics: NeverScrollableScrollPhysics(),//no deja que el usuario haga scroll
                 shrinkWrap: true,//se adapta al espacio total del widget
                 children: [
@@ -124,7 +126,7 @@ class FirstScreen extends StatelessWidget {
                   ...productosComidasRapidas.map((product) => CardType1(
                       name: product['name'],
                       stars: product['stars'].toString(),
-                      url: product['url'],
+                      url: product['url'].toString(),
                       price: product['precio'],))
                 ],
               ),
@@ -144,88 +146,4 @@ class FirstScreen extends StatelessWidget {
   }
 }
 
-class FoodSlider extends StatefulWidget {
-  @override
-  _FoodSliderState createState() => _FoodSliderState();
-}
 
-class _FoodSliderState extends State<FoodSlider> {
-  PageController _pageController = PageController();
-  int _currentPage = 0;
-
- /// Lista de imagenes para el slider
-  List<String> images = [
-    'assets/images/burguer.jpg',
-    'assets/images/empanada.jpg',
-    'assets/images/pizza.jpg',
-  ];
-
-  @override
-  //inicializamos el estado del slider 
-  void initState() {
-    super.initState();
-    startAutoPlay();
-  }
-
-
-  /// esta funcion lo que establece es un Future que nos
-  /// permite colocar una duracion para el cambio de las imagenes
-  void startAutoPlay() {
-    Future.delayed(const Duration(seconds: 3), () {
-      if (_currentPage < images.length - 1) {
-        _currentPage++;
-      } else {
-        
-        _currentPage = 0;
-      }
-      // animar las imagenes(pasar solas las img)
-      _pageController.animateToPage(
-        _currentPage,
-        duration:const Duration(milliseconds: 500),
-        curve: Curves.easeOut,
-      );
-      startAutoPlay();
-    });
-  }
-
-  @override
-  // limpia los controladores
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),//poner un padding
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(1),
-              spreadRadius: 2,//grosor del borde
-              blurRadius: 9,//difuminacion
-              offset: const Offset(0, 0),//espacio de cuando se renderise
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Container(
-            height: 150,
-            child: PageView.builder(//buider se construye en tiempo en ejecucion o peticion
-              controller: _pageController,//
-              itemCount: images.length,//tamaño de la lista
-              itemBuilder: (context, index) {//posicion de la list 
-                return Image.asset(images[index], fit: BoxFit.cover);//retorna la imagen dependiendo de la peticion
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

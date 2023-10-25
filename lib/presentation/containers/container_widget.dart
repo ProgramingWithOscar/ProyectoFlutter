@@ -23,7 +23,7 @@ class ContainerWidget extends StatelessWidget {
                 BoxShadow(
                   color: Colors.grey.withOpacity(1),
                   spreadRadius: 2,
-                  blurRadius: 9,
+                  blurRadius: 3,
                   offset: const Offset(0, 0),
                 ),
               ],

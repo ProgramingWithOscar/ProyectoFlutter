@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:storemap/theme/theme_provider.dart';
 
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+class MyAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight + 40);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
     return AppBar(
-      backgroundColor: Colors.white, // Color de fondo blanco
+      backgroundColor: isDarkMode ? Colors.black12 : Colors.white, // Color de fondo blanco
       elevation: 0, // Sin sombra
       actions: [
         IconButton(
@@ -27,7 +30,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: InputDecoration(
           hintText: 'Buscar...',
           filled: true, // Relleno del campo de entrada
-          fillColor: Colors.grey[100], // Color de relleno gris claro
+          fillColor: isDarkMode ? Colors.blueGrey[900] : Colors.white, // Color de relleno gris claro
           border: OutlineInputBorder(
             borderSide: BorderSide.none, // Borde invisible
             borderRadius: BorderRadius.circular(8.0), // Bordes redondeados

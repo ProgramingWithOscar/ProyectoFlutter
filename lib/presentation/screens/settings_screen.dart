@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:storemap/theme/theme_provider.dart';
 
-class ConfiguracionScreen extends StatelessWidget {
+class ConfiguracionScreen extends ConsumerWidget {
   const ConfiguracionScreen({Key? key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Configuración'),
@@ -36,12 +40,12 @@ class ConfiguracionScreen extends StatelessWidget {
             ),
             const Divider(),
             ListTile(
-              leading: const Icon(Icons.light_mode_outlined),
-              title: const Text('Activar Dark mode'),
+              leading: isDarkMode ? const Icon(Icons.light_mode_outlined) : const Icon(Icons.dark_mode_outlined),
+              title: Text(isDarkMode ?' Desactivar Dark Mode': 'Activar Dark Mode'),
               trailing: Switch(
-                value: false,
-                onChanged: (value){
-
+                value: isDarkMode,
+                onChanged: (value) {
+                  ref.read(themeNotifierProvider.notifier).toggleDarkMode();
                 },
               ),
               onTap: () {

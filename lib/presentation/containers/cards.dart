@@ -24,11 +24,11 @@ class CardType1 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 100,
+            height: 150,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
               image: DecorationImage(
-                image: NetworkImage('https://media.istockphoto.com/id/1448322070/es/foto/sabrosa-hamburguesa-fresca-en-mesa-de-madera.jpg?s=1024x1024&w=is&k=20&c=lQH4UE7iWQv_i8PyeupRFoBkuUu3BrJvYjCkQGOnIcA='),
+                image: NetworkImage(url),
                 fit: BoxFit.cover,
               ),
             ),
