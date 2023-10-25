@@ -14,7 +14,7 @@ class ProductsScreen extends StatelessWidget {
         body: Column(
           children: [
             const Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8.0),
               child: ContainerWidget(
                   url:
                       'https://images.pexels.com/photos/15818982/pexels-photo-15818982/free-photo-of-mano-comida-fotografia-de-comida-espacio-para-texto.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
