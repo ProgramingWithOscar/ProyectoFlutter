@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:storemap/theme/theme_provider.dart';
 
+// Pantalla de configuración
 class ConfiguracionScreen extends ConsumerWidget {
   const ConfiguracionScreen({Key? key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Obtenemos el estado del modo oscuro desde el proveedor
     final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
 
     return Scaffold(
@@ -18,6 +20,7 @@ class ConfiguracionScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Título de las opciones de configuración
             const Text(
               'Opciones de Configuración',
               style: TextStyle(
@@ -26,6 +29,7 @@ class ConfiguracionScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 20),
+            // Elemento de lista para editar la cuenta
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('Editar Cuenta'),
@@ -39,9 +43,12 @@ class ConfiguracionScreen extends ConsumerWidget {
               },
             ),
             const Divider(),
+            // Elemento de lista para activar/desactivar el modo oscuro
             ListTile(
-              leading: isDarkMode ? const Icon(Icons.light_mode_outlined) : const Icon(Icons.dark_mode_outlined),
-              title: Text(isDarkMode ?' Desactivar Dark Mode': 'Activar Dark Mode'),
+              leading: isDarkMode
+                  ? const Icon(Icons.light_mode_outlined)
+                  : const Icon(Icons.dark_mode_outlined),
+              title: Text(isDarkMode ? 'Desactivar Dark Mode' : 'Activar Dark Mode'),
               trailing: Switch(
                 value: isDarkMode,
                 onChanged: (value) {
@@ -49,10 +56,10 @@ class ConfiguracionScreen extends ConsumerWidget {
                 },
               ),
               onTap: () {
-                // Navegar a una pantalla relacionada con la activación del modo oscuro si es necesario.
+                // Puedes navegar a una pantalla relacionada con el modo oscuro si es necesario.
               },
             ),
-            // Agrega más opciones de configuración aquí
+            // Puedes agregar más opciones de configuración aquí
           ],
         ),
       ),
@@ -60,6 +67,7 @@ class ConfiguracionScreen extends ConsumerWidget {
   }
 }
 
+// Pantalla de edición de cuenta
 class EditarCuentaScreen extends StatelessWidget {
   const EditarCuentaScreen({Key? key});
 
@@ -74,6 +82,7 @@ class EditarCuentaScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            // Título para editar la información de la cuenta
             const Text(
               'Editar Información de Cuenta',
               style: TextStyle(
@@ -82,7 +91,7 @@ class EditarCuentaScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            // Aquí puedes agregar campos para editar la cuenta, como nombre, correo electrónico, contraseña, etc.
+            // Campos para editar la cuenta, como nombre, correo electrónico, contraseña, etc.
             // Por ejemplo:
             TextFormField(
               decoration: const InputDecoration(
@@ -101,9 +110,10 @@ class EditarCuentaScreen extends StatelessWidget {
               obscureText: true,
             ),
             const SizedBox(height: 20),
+            // Botón para guardar los cambios
             ElevatedButton(
               onPressed: () {
-                // Aquí puedes agregar la lógica para guardar la información de la cuenta
+                // Puedes agregar la lógica para guardar la información de la cuenta
                 // y navegar de regreso a la pantalla de configuración
                 Navigator.of(context).pop();
               },
@@ -115,3 +125,4 @@ class EditarCuentaScreen extends StatelessWidget {
     );
   }
 }
+

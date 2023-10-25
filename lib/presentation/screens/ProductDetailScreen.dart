@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+//no se esta usando aun
 class ProductDetailsScreen extends StatelessWidget {
   final String name;
   final String stars;
