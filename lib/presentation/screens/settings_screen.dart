@@ -15,6 +15,13 @@ class ConfiguracionScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Configuración'),
       ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        child: TextButton.icon(onPressed: (){
+          Navigator.pop(context);
+        }, icon: Icon(Icons.logout_outlined), label: const Text('Cerrar sesion'),),
+      ),
+   
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -59,6 +66,7 @@ class ConfiguracionScreen extends ConsumerWidget {
                 // Puedes navegar a una pantalla relacionada con el modo oscuro si es necesario.
               },
             ),
+            
             // Puedes agregar más opciones de configuración aquí
           ],
         ),

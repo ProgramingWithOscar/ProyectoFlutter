@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 // Define una clase llamada 'genLoginSignupHeader' que extiende StatelessWidget.
 class genLoginSignupHeader extends StatelessWidget {
-  String headerName; // Declaración de una variable que almacena el nombre del encabezado.
-
+  String
+      headerName; // Declaración de una variable que almacena el nombre del encabezado.
+  final double? height;
+  final double? width;
   // Constructor de la clase 'genLoginSignupHeader' que recibe un argumento 'headerName'.
-  genLoginSignupHeader(this.headerName);
+  genLoginSignupHeader({this.headerName = "", this.height = 250.0, this.width = 250.0});
 
   // Override del método 'build' de StatelessWidget para construir el widget.
   @override
@@ -23,19 +25,12 @@ class genLoginSignupHeader extends StatelessWidget {
           ),
           SizedBox(height: 10.0), // Espacio en blanco vertical de 10 unidades.
           Image.asset(
-            "assets/images/logo.png", // Carga una imagen desde un archivo en el proyecto.
-            height: 150.0, // Altura de la imagen de 150 unidades.
-            width: 150.0, // Ancho de la imagen de 150 unidades.
+            "assets/images/logo-storemap.jpg", // Carga una imagen desde un archivo en el proyecto.
+            height: height, // Altura de la imagen de 150 unidades.
+            width: width, // Ancho de la imagen de 150 unidades.
           ),
-          SizedBox(height: 10.0), // Espacio en blanco vertical de 10 unidades.
-          Text(
-            'Sample Code', // Muestra el texto 'Sample Code'.
-            style: TextStyle(
-                fontWeight: FontWeight.bold, // Estilo de fuente en negrita.
-                color: Colors.black38, // Color de texto negro con opacidad.
-                fontSize: 25.0), // Tamaño de fuente de 25 unidades.
-          ),
-          SizedBox(height: 10.0), // Espacio en blanco vertical de 10 unidades.
+          const SizedBox(
+              height: 10.0), // Espacio en blanco vertical de 10 unidades.
         ],
       ),
     );

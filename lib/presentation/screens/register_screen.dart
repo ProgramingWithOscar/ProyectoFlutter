@@ -61,13 +61,9 @@ class _SignupPageState extends State<SignupPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Muestra un encabezado de registro.
-                  genLoginSignupHeader('Registro'),
+                  genLoginSignupHeader(headerName: 'Registro', height: 180, width: 180,),
 
-                  // Crea un campo de formulario de texto para el ID de usuario.
-                  getTextFormField(
-                      controller: _conUserId,
-                      icon: Icons.person,
-                      hintName: 'ID de Usuario'),
+    
 
                   const SizedBox(height: 10.0),
 

@@ -27,7 +27,7 @@ class MyApp extends ConsumerWidget {
       initialRoute: '/',
       // Rutas de la aplicacion
       routes: {
-        '/': (context) => MainScreen(),
+        '/': (context) => LoginPage(),
         '/register': (context) => SignupPage(),
       },
     );

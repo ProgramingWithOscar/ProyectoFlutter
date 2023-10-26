@@ -53,49 +53,55 @@ class FirstScreen extends StatelessWidget {
                 child: ListView(//mostrar lista de img
                   scrollDirection: Axis.horizontal,//axis es la clase 
                   children: [
+                    ...productosComidasRapidas.map((product) => ContainerWidget(
+                      url: product['url'].toString(), 
+                      name: product['name'], 
+                          onTap: () {//me redirecciona a otra pagina o info del producto 
+                        _launchURL('https://www.google.com/?hl=es');
+                      },))
                     // Agrega aquí tus elementos deseados
-                    ContainerWidget(//widget personalizado y llena el constructor
-                      url: 'assets/images/burguer.jpg',
-                      name: 'Burger',
-                      onTap: () {//me redirecciona a otra pagina o info del producto 
-                        _launchURL('https://www.google.com/?hl=es');
-                      },
-                    ),
-                    ContainerWidget(
-                      url: 'assets/images/pizza.jpg',
-                      name: 'Pizza',
-                      onTap: () {
-                        _launchURL('https://www.google.com/?hl=es');
-                      },
-                    ),
-                    ContainerWidget(
-                      url: 'assets/images/empanada.jpg',
-                      name: 'Empanada',
-                      onTap: () {
-                        _launchURL('https://www.google.com/?hl=es');
-                      },
-                    ),
-                    ContainerWidget(
-                      url: 'assets/images/free.jpg',
-                      name: 'Burger',
-                      onTap: () {
-                        _launchURL('https://www.google.com/?hl=es');
-                      },
-                    ),
-                    ContainerWidget(
-                      url: 'assets/images/free.jpg',
-                      name: 'Burger',
-                      onTap: () {
-                        _launchURL('https://www.google.com/?hl=es');
-                      },
-                    ),
-                    ContainerWidget(
-                      url: 'assets/images/free.jpg',
-                      name: 'Burger',
-                      onTap: () {
-                        _launchURL('https://www.google.com/?hl=es');
-                      },
-                    ),
+                    // ContainerWidget(//widget personalizado y llena el constructor
+                    //   url: 'assets/images/burguer.jpg',
+                    //   name: 'Burger',
+                      // onTap: () {//me redirecciona a otra pagina o info del producto 
+                      //   _launchURL('https://www.google.com/?hl=es');
+                      // },
+                    // ),
+                    // ContainerWidget(
+                    //   url: 'assets/images/pizza.jpg',
+                    //   name: 'Pizza',
+                    //   onTap: () {
+                    //     _launchURL('https://www.google.com/?hl=es');
+                    //   },
+                    // ),
+                    // ContainerWidget(
+                    //   url: 'assets/images/empanada.jpg',
+                    //   name: 'Empanada',
+                    //   onTap: () {
+                    //     _launchURL('https://www.google.com/?hl=es');
+                    //   },
+                    // ),
+                    // ContainerWidget(
+                    //   url: 'assets/images/free.jpg',
+                    //   name: 'Burger',
+                    //   onTap: () {
+                    //     _launchURL('https://www.google.com/?hl=es');
+                    //   },
+                    // ),
+                    // ContainerWidget(
+                    //   url: 'assets/images/free.jpg',
+                    //   name: 'Burger',
+                    //   onTap: () {
+                    //     _launchURL('https://www.google.com/?hl=es');
+                    //   },
+                    // ),
+                    // ContainerWidget(
+                    //   url: 'assets/images/free.jpg',
+                    //   name: 'Burger',
+                    //   onTap: () {
+                    //     _launchURL('https://www.google.com/?hl=es');
+                    //   },
+                    // ),
                   ],
                 ),
               ),
