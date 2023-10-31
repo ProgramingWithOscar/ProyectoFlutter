@@ -30,23 +30,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Center(
-            child: Text(
-              'Hola Carlos', // Título de la aplicación.
-            ),
-          ),
-          titleTextStyle: const TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 5,
-          ),
-        ),
+        // appBar: AppBar(
+        //   title: const Center(
+        //     child: Text(
+        //       'Hola Carlos', // Título de la aplicación.
+        //     ),
+        //   ),
+        //   titleTextStyle: const TextStyle(
+        //     fontSize: 30,
+        //     fontWeight: FontWeight.bold,
+        //     letterSpacing: 5,
+        //   ),
+        // ),
         body: ListView(
           children: [
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(0),
+                padding: const EdgeInsets.all(20),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -65,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () {
                           _selectNewProfilePicture(); // Botón para seleccionar una nueva imagen de perfil.
                         },
-                        child: Icon(CupertinoIcons.camera_fill,), // Icono de cámara.
+                        child: const Icon(CupertinoIcons.camera_fill,), // Icono de cámara.
                       ),
                     ),
                   ],
@@ -92,9 +92,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 30,
             ),
-            Text(
-              'Favorites', // Encabezado para la sección de favoritos.
-              style: TextStyle(letterSpacing: 3, fontSize: 20),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Favorites', // Encabezado para la sección de favoritos.
+                style: TextStyle(letterSpacing: 3, fontSize: 20),
+              ),
             ),
             SizedBox(
               height: 200, // Ajusta la altura según tus necesidades.

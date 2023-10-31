@@ -13,12 +13,13 @@ class MapScreen extends StatelessWidget {  // Define la clase MapScreen que exti
   @override
   Widget build(BuildContext context) {  // Define el método 'build' para construir la pantalla.
     return Scaffold(  // Define la estructura básica de la pantalla.
-      appBar: AppBar(  // Configura la barra de la aplicación en la parte superior.
-        centerTitle: true,  // Centra el título en la barra.
-        title: const Text('Map'),  // Establece el título de la barra de la aplicación.
-        backgroundColor: Colors.blueAccent,  // Establece el color de fondo de la barra.
-      ),
-      body: FlutterMap(  // Widget para mostrar un mapa interactivo.
+      // appBar: AppBar(  // Configura la barra de la aplicación en la parte superior.
+      //   centerTitle: true,  // Centra el título en la barra.
+      //   title: const Text('Map'),  // Establece el título de la barra de la aplicación.
+      //   backgroundColor: Colors.blueAccent,  // Establece el color de fondo de la barra.
+      // ),
+      body: FlutterMap(  
+     // Widget para mostrar un mapa interactivo.
         options: MapOptions(  // Opciones del mapa.
             center: myPosition,  // Define el centro del mapa en base a la variable 'myPosition'.
             minZoom: 10,  // Nivel de zoom mínimo.

@@ -1,47 +1,31 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:storemap/firebase_auth_implementation/firebase_auth_services.dart';
+import 'package:storemap/presentation/containers/show_dialog.dart';
+import 'package:storemap/presentation/screens/auth_screen.dart';
+import 'package:storemap/widgets/form_container_widget.dart';
 
-// Importaciones de módulos y clases personalizadas.
-import 'package:storemap/Comm/genLoginSignupHeader.dart';
-import 'package:storemap/Comm/genTextFormField.dart';
-import 'package:storemap/database/database_helper.dart';
-import 'package:storemap/entities/users.dart';
-
-class SignupPage extends StatefulWidget {
-  // Constructor para el widget SignupPage.
-  const SignupPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  // Crea un estado para SignupPage.
-  _SignupPageState createState() => _SignupPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
-  // Función para mostrar usuarios registrados en el futuro.
-  Future<void> mostrarUsuariosRegistrados() async {
-    // Obtiene una lista de UserModel desde la base de datos.
-    final List<UserModel> usuarios = await DB.getUsers();
-    for (final usuario in usuarios) {
-      // Imprime la información del usuario.
-      print('id: ${usuario.id}, name: ${usuario.name}, email: ${usuario.email}');
-    }
-  }
+class _SignUpPageState extends State<SignUpPage> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
-  // Clave global para validar el formulario.
-  final _formKey = GlobalKey<FormState>();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
-  // Controladores de texto para campos de entrada.
-  final _conUserId = TextEditingController();
-  final _conUserName = TextEditingController();
-  final _conEmail = TextEditingController();
-  final _conPassword = TextEditingController();
-  final _conCPassword = TextEditingController();
-
-  // Lista para almacenar UserModel.
-  List<UserModel> users = [];
+  bool isSigningUp = false;
 
   @override
   void dispose() {
-    _conUserId.dispose();
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -49,112 +33,152 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Iniciar Sesión con Registro'),
+        automaticallyImplyLeading: false,
+        title: Text("SignUp"),
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Container(
-            child: Center(
-              child: Column(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Sign Up",
+                style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              FormContainerWidget(
+                controller: _usernameController,
+                hintText: "Username",
+                isPasswordField: false,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FormContainerWidget(
+                controller: _emailController,
+                hintText: "Email",
+                isPasswordField: false,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              FormContainerWidget(
+                controller: _passwordController,
+                hintText: "Password",
+                isPasswordField: true,
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              GestureDetector(
+                onTap: () {
+                  _signUp();
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                      child: isSigningUp
+                          ? CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Muestra un encabezado de registro.
-                  genLoginSignupHeader(headerName: 'Registro', height: 180, width: 180,),
-
-    
-
-                  const SizedBox(height: 10.0),
-
-                  // Crea un campo de formulario de texto para el nombre de usuario.
-                  getTextFormField(
-                      controller: _conUserName,
-                      icon: Icons.person_outline,
-                      inputType: TextInputType.name,
-                      hintName: 'Nombre de Usuario'),
-
-                  const SizedBox(height: 10.0),
-
-                  // Crea un campo de formulario de texto para el correo electrónico.
-                  getTextFormField(
-                      controller: _conEmail,
-                      icon: Icons.email,
-                      inputType: TextInputType.emailAddress,
-                      hintName: 'Correo Electrónico'),
-
-                  const SizedBox(height: 10.0),
-
-                  // Crea un campo de formulario de texto para la contraseña.
-                  getTextFormField(
-                    controller: _conPassword,
-                    icon: Icons.lock,
-                    hintName: 'Contraseña',
-                    isObscureText: true,
+                  Text("Already have an account?"),
+                  SizedBox(
+                    width: 5,
                   ),
-
-                  const SizedBox(height: 10.0),
-
-                  // Crea un campo de formulario de texto para confirmar la contraseña.
-                  getTextFormField(
-                    controller: _conCPassword,
-                    icon: Icons.lock,
-                    hintName: 'Confirmar Contraseña',
-                    isObscureText: true,
-                  ),
-
-                  // Contenedor para el botón de registro.
-                  Container(
-                    margin: const EdgeInsets.all(30.0),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final nameEntered = _conUserName.text;
-                        final registerEmail = _conEmail.text;
-                        // Obtiene el correo electrónico ingresado.
-                        final registerPassword = _conPassword.text;
-                        // Obtiene la contraseña ingresada.
-                        final usuario = UserModel(
-                            name: nameEntered,
-                            email: registerEmail,
-                            password: registerPassword);
-                        final insertedRows = await DB.insert(usuario);
-                        if (insertedRows > 0) {
-                          Navigator.pop(context,
-                              usuario); // Cierra la pantalla de registro y devuelve los datos al estado anterior.
-                          mostrarUsuariosRegistrados();
-                        } else {
-                          // Error: no se pudo insertar el usuario en la base de datos.
-                          // Puedes mostrar un mensaje de error al usuario.
-                        }
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                            (route) => false);
                       },
-                      child: const Text(
-                        'Registrarse',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ),
-
-                  // Fila con un enlace para iniciar sesión.
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    const Text('¿Ya tienes una cuenta? '),
-                    ElevatedButton(
-                      child: const Text('Iniciar Sesión'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ])
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold),
+                      ))
                 ],
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
     );
   }
+
+ void _signUp() async {
+  setState(() {
+    isSigningUp = true;
+  });
+
+  String username = _usernameController.text;
+  String email = _emailController.text;
+  String password = _passwordController.text;
+
+  User? user = await _auth.signUpWithEmailAndPassword(email, password);
+
+  setState(() {
+    isSigningUp = false;
+  });
+
+  if (user != null) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Usuario registrado con éxito'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, "/");
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  } else {
+           showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Ha ocurrido un error, verifique e intente nuevamente'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Aceptar'),
+                ),
+              ],
+            );
+          });
+  }
+}
+
 }
