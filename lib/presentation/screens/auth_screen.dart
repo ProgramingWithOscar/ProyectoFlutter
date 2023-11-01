@@ -31,16 +31,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Login"),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset('assets/images/logo-storemap.jpg', height: 250,),
               Text(
                 "Login",
                 style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
@@ -90,10 +87,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20,),
-                    ElevatedButton(
-              
-                onPressed: signInWithGoogle,
+              const SizedBox(
+                height: 20,
+              ),
+              ElevatedButton(
+                onPressed: _signInWithGoogle,
                 child: Text('Iniciar sesión con Google'),
               ),
               SizedBox(
@@ -164,11 +162,12 @@ class _LoginPageState extends State<LoginPage> {
             );
           });
     } else {
-          showDialog(
+      showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Ha ocurrido un error, verifique e intente nuevamente'),
+              title: const Text(
+                  'Ha ocurrido un error, verifique e intente nuevamente'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -182,8 +181,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-Future<void> signInWithGoogle() async {
-  try {
+  void _signInWithGoogle() async {
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
     if (googleUser == null) {
@@ -191,27 +189,21 @@ Future<void> signInWithGoogle() async {
       return;
     }
 
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    // Configura la persistencia de sesión de Firebase en 'local'
-    await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
-
-    final UserCredential authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+    final UserCredential authResult =
+        await FirebaseAuth.instance.signInWithCredential(credential);
     final User? user = authResult.user;
 
     if (user != null) {
-      // El inicio de sesión con Google fue exitoso
-      // Realiza acciones adicionales aquí
+      // El inicio de sesión con Google fue exitoso, puedes realizar acciones adicionales aquí
       // Por ejemplo, redirigir a la pantalla principal
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => MainScreen()));
+      Navigator.push(context, MaterialPageRoute(builder: (_) => MainScreen()));
     }
-  } catch (e) {
-    // Manejar errores aquí, por ejemplo, mostrar un mensaje de error
-    print('Error al iniciar sesión con Google: $e');
   }
-}
 }

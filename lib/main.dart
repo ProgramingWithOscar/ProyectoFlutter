@@ -10,15 +10,19 @@ import 'package:storemap/presentation/screens/register_screen.dart';
 import 'package:storemap/theme/app_theme.dart';
 import 'package:storemap/theme/theme_provider.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
+    options: DefaultFirebaseOptions.currentPlatform,
   );
-    GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']); // Inicializa GoogleSignIn
+
+  GoogleSignIn googleSignIn = GoogleSignIn(clientId: 'TU_CLIENT_ID', scopes: ['email']); // Reemplaza 'TU_CLIENT_ID' con tu ID de cliente de Google
 
   runApp(ProviderScope(child: MyApp()));
 }
+
+// El resto de tu código permanece igual.
+
 
 class MyApp extends ConsumerWidget {
   @override
@@ -35,7 +39,7 @@ class MyApp extends ConsumerWidget {
       initialRoute: '/',
       // Rutas de la aplicacion
       routes: {
-        '/': (context) => MainScreen(),
+        '/': (context) => const LoginPage(),
         '/register': (context) => const SignUpPage(),
       },
     );

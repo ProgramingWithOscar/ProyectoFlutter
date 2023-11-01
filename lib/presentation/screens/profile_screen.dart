@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart'; // Importa la biblioteca Flutter para crear la interfaz de usuario.
 import 'package:flutter/cupertino.dart'; // Importa la biblioteca Cupertino para widgets específicos de iOS.
-import 'package:image_picker/image_picker.dart'; // Importa la biblioteca para seleccionar imágenes desde la galería.
-import 'dart:io'; // Importa la biblioteca 'dart:io' para trabajar con archivos locales.
-
-import 'package:storemap/widgets/favorite_widget.dart'; // Importa un widget personalizado llamado 'FavoriteWidget'.
+import 'package:image_picker/image_picker.dart';
+import 'package:storemap/presentation/screens/favorite_screen.dart'; // Importa la biblioteca para seleccionar imágenes desde la galería.
+// Importa un widget personalizado llamado 'FavoriteWidget'.
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -90,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             const SizedBox(
-              height: 30,
+              height: 130,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -99,18 +100,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(letterSpacing: 3, fontSize: 20),
               ),
             ),
+          
             SizedBox(
               height: 200, // Ajusta la altura según tus necesidades.
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: const [
-                  FavoriteWidget(
-                    url:
-                        'https://cdn.pixabay.com/photo/2023/08/26/14/19/cupcake-8215179_1280.jpg',
-                  ),
-                  // Aquí se muestran varios 'FavoriteWidget' con imágenes de ejemplo.
-                ],
-              ),
+              child: FavoritesScreen()
             ),
           ],
         ),
