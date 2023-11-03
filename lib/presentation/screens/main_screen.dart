@@ -16,26 +16,24 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {  // Define el método 'build' para construir la pantalla.
-    return SafeArea(  // Asegura que el contenido no se coloque debajo de las barras de sistema.
-      child: Scaffold(
-        backgroundColor: Colors.white,  // Define la estructura básica de la pantalla.
-        bottomNavigationBar: BotonNavegacion(  // Agrega una barra de navegación en la parte inferior.
-          onTabSelected: (index) {  // Función que se ejecuta cuando se selecciona una pestaña.
-            setState(() {  // Actualiza el estado de la aplicación.
-              selectedIndex = index;  // Actualiza el índice de la pantalla seleccionada.
-            });
-          },
-        ),
-        body: IndexedStack(  // Permite apilar varias pantallas y mostrar solo una a la vez.
-          index: selectedIndex,  // Índice de la pantalla que se mostrará.
-          children: <Widget>[  // Lista de pantallas disponibles.
-            const FirstScreen(),  // Pantalla FirstScreen.
-            const ProductsScreen(),  // Pantalla ProductsScreen.
-            const MapScreen(),  // Pantalla MapScreen.
-            const ProfileScreen(),  // Pantalla ProfileScreen.
-            ConfiguracionScreen()  // Pantalla ConfiguracionScreen.
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: Colors.white,  // Define la estructura básica de la pantalla.
+      bottomNavigationBar: BotonNavegacion(  // Agrega una barra de navegación en la parte inferior.
+        onTabSelected: (index) {  // Función que se ejecuta cuando se selecciona una pestaña.
+          setState(() {  // Actualiza el estado de la aplicación.
+            selectedIndex = index;  // Actualiza el índice de la pantalla seleccionada.
+          });
+        },
+      ),
+      body: IndexedStack(  // Permite apilar varias pantallas y mostrar solo una a la vez.
+        index: selectedIndex,  // Índice de la pantalla que se mostrará.
+        children: <Widget>[  // Lista de pantallas disponibles.
+          const FirstScreen(),  // Pantalla FirstScreen.
+          const ProductsScreen(),  // Pantalla ProductsScreen.
+          const MapScreen(),  // Pantalla MapScreen.
+          const ProfileScreen(),  // Pantalla ProfileScreen.
+          ConfiguracionScreen()  // Pantalla ConfiguracionScreen.
+        ],
       ),
     );
   }

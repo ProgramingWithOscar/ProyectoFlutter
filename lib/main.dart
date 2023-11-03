@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:storemap/firebase_options.dart';
+import 'package:storemap/presentation/screens/emprendedor/Home_emprender.dart';
 import 'package:storemap/presentation/screens/auth_screen.dart';
+import 'package:storemap/presentation/screens/emprendedor/insert.dart';
 import 'package:storemap/presentation/screens/main_screen.dart';
 
 import 'package:storemap/presentation/screens/register_screen.dart';
@@ -39,7 +41,7 @@ class MyApp extends ConsumerWidget {
       initialRoute: '/',
       // Rutas de la aplicacion
       routes: {
-        '/': (context) => const LoginPage(),
+        '/': (context) => LoginPage(),
         '/register': (context) => const SignUpPage(),
       },
     );

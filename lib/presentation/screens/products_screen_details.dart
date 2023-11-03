@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:storemap/presentation/containers/bottom_navigator.dart';
 import 'package:storemap/theme/app_theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProductsDetailsScreen extends StatelessWidget {
   final String imageUrl;
@@ -8,14 +9,15 @@ class ProductsDetailsScreen extends StatelessWidget {
   final String price;
   final String description;
   final String stars;
-
+  final String whatsaap;
   const ProductsDetailsScreen(
       {super.key,
       required this.imageUrl,
       required this.name,
       required this.price,
       required this.description,
-      required this.stars});
+      required this.stars,
+      required this.whatsaap});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +26,17 @@ class ProductsDetailsScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
         child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.lightGreen),
-          label: const Text('Comprar en WhatsApp', style: TextStyle(
-            color: Colors.white, fontWeight: FontWeight.bold
-          ),),
-          onPressed: () {},
-          icon: const Icon(Icons.call_made, color: Colors.white,),
+          label: const Text(
+            'Comprar en WhatsApp',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          onPressed: () {
+            _launchURL('whatsapp://send?phone=$whatsaap');
+          },
+          icon: const Icon(
+            Icons.call_made,
+            color: Colors.white,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -42,6 +50,7 @@ class ProductsDetailsScreen extends StatelessWidget {
               description: description,
               price: price,
               stars: stars,
+              whatsapp: whatsaap,
             )),
             Positioned(
               left: 10,
@@ -69,19 +78,28 @@ class ProductsDetailsScreen extends StatelessWidget {
   }
 }
 
+Future<void> _launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'No se pudo abrir la URL: $url';
+  }
+}
+
 class _Product extends StatelessWidget {
   final String url;
   final String name;
   final String description;
   final String price;
   final String stars;
+  final String whatsapp;
   const _Product({
     super.key,
     required this.url,
     required this.name,
     required this.description,
     required this.price,
-    required this.stars,
+    required this.stars, required this.whatsapp,
   });
 
   @override

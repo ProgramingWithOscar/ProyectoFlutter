@@ -1,17 +1,65 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart'; // Importa el paquete necesario para Flutter.
 import 'package:storemap/database/cards_json.dart'; // Importa un archivo que contiene datos de productos.
 import 'package:storemap/presentation/containers/cards.dart'; // Importa un contenedor que muestra tarjetas de productos.
 import 'package:storemap/presentation/containers/my_appbar.dart'; // Importa un contenedor que representa la barra de la aplicación.
 
-class ProductsScreen extends StatelessWidget {
+class ProductsScreen extends StatefulWidget {
   // Define la clase ProductsScreen que extiende StatelessWidget.
   const ProductsScreen({super.key});
+
+  @override
+  State<ProductsScreen> createState() => _ProductsScreenState();
+}
+
+class _ProductsScreenState extends State<ProductsScreen> {
+  final user = FirebaseAuth.instance.currentUser;
+  Query db_refe = FirebaseDatabase.instance.ref().child('contacts');
+
+  List<CardType1> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (user != null) {
+      DatabaseReference dbRef =
+          FirebaseDatabase.instance.ref().child('contacts');
+      DataSnapshot dataSnapshot;
+
+      dbRef.once().then((event) {
+        dataSnapshot = event.snapshot;
+
+        print(dataSnapshot.value);
+        if (dataSnapshot.value != null) {
+          final data = dataSnapshot.value as Map;
+          data.forEach((key, value) {
+            print(value['url']);
+            final product = CardType1(
+              name: value['name'],
+              stars: '4.5',
+              url: value['url'],
+              price: value['price'],
+              description: value['description'],
+              whatsaap: value['whatsapp'],
+            );
+            products.add(product);
+          });
+          print(dataSnapshot.value);
+
+          setState(() {});
+        }
+      });
+    } else {
+      print('no');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // Define el método 'build' para construir la pantalla.
     return SafeArea(
-      // Asegura que el contenido no se coloque debajo de las barras de sistema.
       child: Scaffold(
         // Define la estructura básica de la pantalla.
         // appBar:
@@ -51,16 +99,21 @@ class ProductsScreen extends StatelessWidget {
             ),
             Expanded(
               // Permite que el ListView ocupe todo el espacio restante disponible.
-              child: ListView(
+              child: ListView.builder(
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return CardType1(
+                    name: product.name,
+                    stars: product.stars,
+                    url: product.url,
+                    price: product.price,
+                    description: product.description,
+                    whatsaap: product.whatsaap,
+                  );
+                },
                 // Widget para mostrar una lista de elementos.
-                children: [
-                  ...productosComidasRapidas.map((product) => CardType1(
-                        name: product['name'],
-                        stars: product['stars'].toString(),
-                        url: product['url'],
-                        price: product['precio'],
-                      )) // Mapea los datos de productos y crea tarjetas CardType1.
-                ],
+    
                 scrollDirection: Axis
                     .vertical, // Dirección de desplazamiento de la lista (vertical).
               ),

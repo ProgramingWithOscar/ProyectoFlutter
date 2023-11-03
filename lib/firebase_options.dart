@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '360758493206',
     projectId: 'storemap-8abbc',
     authDomain: 'storemap-8abbc.firebaseapp.com',
+    databaseURL: 'https://storemap-8abbc-default-rtdb.firebaseio.com/',
     storageBucket: 'storemap-8abbc.appspot.com',
     measurementId: 'G-2BFDLNP7MR',
   );

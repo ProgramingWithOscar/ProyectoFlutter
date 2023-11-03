@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart'; // Importa la biblioteca Flutter para crear la interfaz de usuario.
 import 'package:flutter/cupertino.dart'; // Importa la biblioteca Cupertino para widgets específicos de iOS.
 import 'package:image_picker/image_picker.dart';
@@ -15,34 +17,63 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   File? _profileImage; // Declara una variable para la imagen de perfil.
+  User? user = FirebaseAuth.instance.currentUser;
+  String? name;
+  String? correo;
+
+  @override
+  void initState() {
+    super.initState();
+    if (user != null) {
+      print(user!.uid);
+      displayUserInfo(user!.uid);
+    }
+  }
 
   Future<void> _selectNewProfilePicture() async {
-    final picker = ImagePicker(); // Crea una instancia de 'ImagePicker' para seleccionar imágenes.
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery); // Abre la galería y selecciona una imagen.
+    final picker =
+        ImagePicker(); // Crea una instancia de 'ImagePicker' para seleccionar imágenes.
+    final pickedFile = await picker.pickImage(
+        source:
+            ImageSource.gallery); // Abre la galería y selecciona una imagen.
 
     if (pickedFile != null) {
       setState(() {
-        _profileImage = File(pickedFile.path); // Almacena la imagen seleccionada en '_profileImage'.
+        _profileImage = File(pickedFile
+            .path); // Almacena la imagen seleccionada en '_profileImage'.
       });
     }
+  }
+
+  Future<void> displayUserInfo(String userId) async {
+    print(user!.uid);
+    DatabaseReference usersRef = FirebaseDatabase.instance.ref().child('users');
+    DataSnapshot dataSnapshot;
+
+    await usersRef.child(userId).once().then((event) {
+      dataSnapshot = event.snapshot;
+
+      if (dataSnapshot.value != null) {
+        print(dataSnapshot.value);
+        Map<dynamic, dynamic> userData =
+            dataSnapshot.value as Map<dynamic, dynamic>;
+
+        if (userData['name'] != null) {
+          print('User Data' + userData['name']);
+          setState(() {
+            correo = userData['email'];
+            name = userData['name'];
+            print('Name state' + name!);
+          });
+        }
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: const Center(
-        //     child: Text(
-        //       'Hola Carlos', // Título de la aplicación.
-        //     ),
-        //   ),
-        //   titleTextStyle: const TextStyle(
-        //     fontSize: 30,
-        //     fontWeight: FontWeight.bold,
-        //     letterSpacing: 5,
-        //   ),
-        // ),
         body: ListView(
           children: [
             Center(
@@ -66,7 +97,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onPressed: () {
                           _selectNewProfilePicture(); // Botón para seleccionar una nueva imagen de perfil.
                         },
-                        child: const Icon(CupertinoIcons.camera_fill,), // Icono de cámara.
+                        child: const Icon(
+                          CupertinoIcons.camera_fill,
+                        ), // Icono de cámara.
                       ),
                     ),
                   ],
@@ -76,17 +109,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CupertinoFormSection(
               children: [
                 CupertinoTextFormFieldRow(
-                  placeholder: 'Nombre',
-                  enabled: false, // Campo de texto para el nombre, deshabilitado.
+                  initialValue: name ?? '',
+                  placeholder: '$name',
+                  enabled:
+                      false, // Campo de texto para el nombre, deshabilitado.
                 ),
                 CupertinoTextFormFieldRow(
-                  placeholder: 'Aca va la info',
+                  placeholder: '$correo',
                   enabled: false, // Otro campo de texto, deshabilitado.
-                ),
-                CupertinoTextFormFieldRow(
-                  placeholder: 'Aca va la info',
-                  keyboardType: TextInputType.emailAddress,
-                  enabled: false, // Campo de texto para el correo electrónico, deshabilitado.
                 ),
               ],
             ),
@@ -100,11 +130,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(letterSpacing: 3, fontSize: 20),
               ),
             ),
-          
             SizedBox(
-              height: 200, // Ajusta la altura según tus necesidades.
-              child: FavoritesScreen()
-            ),
+                height: 200, // Ajusta la altura según tus necesidades.
+                child: FavoritesScreen()),
           ],
         ),
       ),

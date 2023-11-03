@@ -8,13 +8,16 @@ class CardType1 extends ConsumerWidget {
   final String stars;
   final String url;
   final String price;
-
-  const CardType1({
-    required this.name,
-    required this.stars,
-    required this.url,
-    required this.price,
-  });
+  final String description;
+  final String whatsaap;
+  const CardType1(
+      {required this.name,
+      required this.stars,
+      required this.url,
+      required this.price,
+      required this.description,
+      required this.whatsaap
+      });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,9 +32,9 @@ class CardType1 extends ConsumerWidget {
               imageUrl: url,
               name: name,
               price: price,
-              description:
-                  'Mollit non ea quis dolore. Voluptate mollit quis aliquip anim aute occaecat reprehenderit exercitation veniam. Irure tempor nisi laboris nulla consectetur labore. Ea culpa ipsum est aliqua sint esse. Labore nostrud culpa tempor officia nostrud.',
+              description: description,
               stars: stars,
+              whatsaap: whatsaap,
             ),
           ),
         );
@@ -55,6 +58,9 @@ class CardType1 extends ConsumerWidget {
                     image: DecorationImage(
                       image: NetworkImage(url),
                       fit: BoxFit.cover,
+                      onError: (exception, stackTrace) {
+                        print('Erro na imagem');
+                      },
                     ),
                   ),
                 ),
@@ -70,7 +76,7 @@ class CardType1 extends ConsumerWidget {
                       print('Producto agregado a favoritos');
                       print(lista);
                     } else {
-                       ref
+                      ref
                           .read(productsFavorites.notifier)
                           .removeProductFromFavorites(url);
                       print('Producto agregado a favoritos');
@@ -86,7 +92,7 @@ class CardType1 extends ConsumerWidget {
                     // }
                   },
                   icon: Icon(
-                    isFavoriteP ? Icons.favorite: Icons.favorite_border,
+                    isFavoriteP ? Icons.favorite : Icons.favorite_border,
                     color: Colors.red,
                   ),
                 ),
