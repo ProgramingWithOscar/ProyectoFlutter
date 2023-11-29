@@ -25,7 +25,7 @@ class BotonNavegacionState extends State<BotonNavegacion> {
     // Lista de páginas disponibles.
     const FirstScreen(), // Primera pantalla.
     const ProductsScreen(), // Pantalla de productos.
-    const MapScreen(), // Pantalla de mapa.
+     GoogleMapExample(), // Pantalla de mapa.
     const ProfileScreen(), // Pantalla de perfil de usuario.
     ConfiguracionScreen() // Pantalla de configuración.
   ];
@@ -35,6 +35,7 @@ class BotonNavegacionState extends State<BotonNavegacion> {
     final color = Theme.of(context)
         .colorScheme; // Define el método 'build' para construir el widget de navegación.
     return BottomNavigationBar(
+      elevation: 0,
       // Widget de barra de navegación inferior.
       currentIndex: selectedIndex, // Índice de la pestaña actual.
       onTap: (int index) {

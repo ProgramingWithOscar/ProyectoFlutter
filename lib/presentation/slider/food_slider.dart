@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class FoodSlider extends StatelessWidget {
   // Lista de rutas a imágenes que se mostrarán en el control deslizante
   final List<String> images = [
-    'assets/images/burguer.jpg',
-    'assets/images/empanada.jpg',
-    'assets/images/pizza.jpg',
+    'assets/images/1_poster.jpg',
+    'assets/images/2_poster.jpg',
+    'assets/images/3_poster.jpg',
   ];
 
   // Constructor de la clase FoodSlider

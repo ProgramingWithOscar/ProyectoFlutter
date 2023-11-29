@@ -15,7 +15,9 @@ import 'package:flutter/foundation.dart'
 /// );
 /// ```
 class DefaultFirebaseOptions {
+  
   static FirebaseOptions get currentPlatform {
+    
     if (kIsWeb) {
       return web;
     }
@@ -52,6 +54,7 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://storemap-8abbc-default-rtdb.firebaseio.com/',
     storageBucket: 'storemap-8abbc.appspot.com',
     measurementId: 'G-2BFDLNP7MR',
+  
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -60,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '360758493206',
     projectId: 'storemap-8abbc',
     storageBucket: 'storemap-8abbc.appspot.com',
+    
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

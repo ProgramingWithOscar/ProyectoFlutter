@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:storemap/presentation/screens/products_screen_details.dart';
+import 'package:storemap/theme/theme_provider.dart';
 import 'package:storemap/widgets/favorite_provider.dart';
 
 class CardType1 extends ConsumerWidget {
-  final String name;
-  final String stars;
+  final String? name;
+  final String? stars;
   final String url;
-  final String price;
-  final String description;
-  final String whatsaap;
+  final String? price;
+  final String? description;
+  final String? whatsaap;
   const CardType1(
-      {required this.name,
-      required this.stars,
-      required this.url,
-      required this.price,
-      required this.description,
-      required this.whatsaap
-      });
+      { this.name,
+       this.stars,
+       required this.url,
+       this.price,
+       this.description,
+       this.whatsaap});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(themeNotifierProvider).isDarkMode;
     final isFavoriteP = ref.watch(isFavoriteProvider(url));
     final lista = ref.watch(productsFavorites);
     return GestureDetector(
@@ -30,16 +31,18 @@ class CardType1 extends ConsumerWidget {
           MaterialPageRoute(
             builder: (_) => ProductsDetailsScreen(
               imageUrl: url,
-              name: name,
-              price: price,
-              description: description,
-              stars: stars,
-              whatsaap: whatsaap,
+              name: name!,
+              price: price!,
+              description: description!,
+              stars: stars!,
+              whatsaap: whatsaap!,
             ),
           ),
         );
       },
       child: Card(
+        
+        color: isDarkMode ? Colors.transparent : Colors.white,
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
@@ -104,7 +107,7 @@ class CardType1 extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name,
+                    name!,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -128,7 +131,7 @@ class CardType1 extends ConsumerWidget {
                             color: Colors.orange,
                           ),
                           Text(
-                            stars,
+                            stars!,
                             style: const TextStyle(
                               color: Colors.orange,
                               fontWeight: FontWeight.bold,

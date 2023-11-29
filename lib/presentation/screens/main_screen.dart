@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
         children: <Widget>[  // Lista de pantallas disponibles.
           const FirstScreen(),  // Pantalla FirstScreen.
           const ProductsScreen(),  // Pantalla ProductsScreen.
-          const MapScreen(),  // Pantalla MapScreen.
+           GoogleMapExample(),  // Pantalla MapScreen.
           const ProfileScreen(),  // Pantalla ProfileScreen.
           ConfiguracionScreen()  // Pantalla ConfiguracionScreen.
         ],

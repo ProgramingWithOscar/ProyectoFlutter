@@ -22,3 +22,4 @@ class ThemeNotifier extends StateNotifier<AppTheme> {
   }
 }
 
+final showSplashProvider = StateProvider<bool>((ref) => true);

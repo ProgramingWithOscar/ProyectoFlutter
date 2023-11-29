@@ -65,7 +65,8 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               FormContainerWidget(
                 controller: _passwordController,
-                hintText: "Password",
+                
+                hintText: "Password (minimo 6 caracteres)",
                 isPasswordField: true,
               ),
               const SizedBox(
@@ -145,6 +146,7 @@ class _SignUpPageState extends State<SignUpPage> {
         {
           'email': user.email,
           'name' : username,  
+          
         }
 
       );

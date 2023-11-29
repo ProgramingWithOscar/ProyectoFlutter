@@ -1,59 +1,151 @@
-import 'package:flutter/material.dart';  // Importa el paquete necesario para Flutter.
-import 'package:flutter_map/flutter_map.dart';  // Importa el paquete para trabajar con mapas interactivos.
-import 'package:latlong2/latlong.dart';  // Importa el paquete para manejar coordenadas geográficas.
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-const MAPBOX_ACCES_TOKEN =
-    'pk.eyJ1IjoibWFubnlsZW52IiwiYSI6ImNsbXRidHMzdjAxYTEybWxiYnA1Z3c5M2QifQ.A_F0i1F1hbmOnt3uGkqwBA';  // Define un token de acceso a Mapbox.
+class GoogleMapExample extends StatefulWidget {
+  @override
+  _GoogleMapExampleState createState() => _GoogleMapExampleState();
+}
 
-final myPosition = LatLng(6.98789, -73.04953);  // Define una variable que representa una coordenada geográfica.
+class _GoogleMapExampleState extends State<GoogleMapExample> {
+  late GoogleMapController _controller;
+  Position? _currentPosition;
+  int _selectedIndex = 0;
+  TextEditingController _locationController = TextEditingController();
+  String _enteredLocation = "";
 
-class MapScreen extends StatelessWidget {  // Define la clase MapScreen que extiende StatelessWidget.
-  const MapScreen({super.key});
+  final titles = ["Mi Ubicación"];
 
   @override
-  Widget build(BuildContext context) {  // Define el método 'build' para construir la pantalla.
-    return SafeArea(
-      child: Scaffold(  // Define la estructura básica de la pantalla.
-        // appBar: AppBar(  // Configura la barra de la aplicación en la parte superior.
-        //   centerTitle: true,  // Centra el título en la barra.
-        //   title: const Text('Map'),  // Establece el título de la barra de la aplicación.
-        //   backgroundColor: Colors.blueAccent,  // Establece el color de fondo de la barra.
-        // ),
-        body: FlutterMap(  
-       // Widget para mostrar un mapa interactivo.
-          options: MapOptions(  // Opciones del mapa.
-              center: myPosition,  // Define el centro del mapa en base a la variable 'myPosition'.
-              minZoom: 10,  // Nivel de zoom mínimo.
-              maxZoom: 35,  // Nivel de zoom máximo.
-              zoom: 18  // Nivel de zoom inicial.
-          ),
-          nonRotatedChildren: [  // Elementos que no se rotarán con el mapa.
-            TileLayer(  // Capa de teselas del mapa.
-              urlTemplate: 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',  // Plantilla de URL para las teselas del mapa.
-              additionalOptions: const {
-                'accessToken': MAPBOX_ACCES_TOKEN,  // Token de acceso a Mapbox.
-                'id': 'mapbox/streets-v12'  // Estilo del mapa (puede ser 'mapbox/streets-v12' o 'mapbox/satellite-v9', en este caso).
-              },
-            ),
-            MarkerLayer(  // Capa de marcadores en el mapa.
-              markers: [
-                Marker(  // Define un marcador en una ubicación específica.
-                  point: myPosition,  // Ubicación del marcador basada en 'myPosition'.
-                  builder: (context) {  // Constructor del marcador.
-                    return Container(  // Contenedor del marcador.
-                      child: const Icon(  // Icono del marcador.
-                        Icons.person_pin,  // Ícono de ubicación de persona.
-                        color: Colors.blueAccent,  // Color del ícono.
-                        size: 40,  // Tamaño del ícono.
-                      ),
-                    );
-                  },
-                )
-              ],
-            )
-          ],
+  void initState() {
+    super.initState();
+    _requestLocationPermission();
+  }
+
+  void _requestLocationPermission() async {
+    final status = await Permission.location.request();
+    if (status.isGranted) {
+      await _getCurrentLocation();
+      _startListeningForLocationUpdates();
+    } else if (status.isDenied) {
+      // Handle permission denied here
+    }
+  }
+
+  Future<void> _getCurrentLocation() async {
+    final currentPosition = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+
+    setState(() {
+      _currentPosition = currentPosition;
+    });
+  }
+
+  void _startListeningForLocationUpdates() {
+    Geolocator.getPositionStream().listen((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(titles[_selectedIndex]),
         ),
+        body: _getPage(_selectedIndex),
       ),
     );
+  }
+
+  Widget _getPage(int index) {
+    switch (index) {
+      case 0:
+        return _buildMap();
+      default:
+        return Container();
+    }
+  }
+
+  Widget _buildMap() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _locationController,
+            decoration: InputDecoration(
+              labelText: 'Ingrese la ubicación',
+              suffixIcon: IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  _searchLocation();
+                },
+              ),
+            ),
+            onChanged: (value) {
+              setState(() {
+                _enteredLocation = value;
+              });
+            },
+          ),
+        ),
+        Expanded(
+          child: _currentPosition != null
+              ? GoogleMap(
+                  onMapCreated: (controller) {
+                    setState(() {
+                      _controller = controller;
+                    });
+                  },
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(
+                      _currentPosition!.latitude,
+                      _currentPosition!.longitude,
+                    ),
+                    zoom: 15.0,
+                  ),
+                  markers: {
+                    Marker(
+                      markerId: MarkerId("currentLocation"),
+                      position: LatLng(
+                        _currentPosition!.latitude,
+                        _currentPosition!.longitude,
+                      ),
+                      infoWindow: InfoWindow(
+                        title: "Mi Ubicación Actual",
+                        snippet:
+                            "Latitud: ${_currentPosition!.latitude}, Longitud: ${_currentPosition!.longitude}",
+                      ),
+                    ),
+                  },
+                )
+              : Center(child: CircularProgressIndicator()),
+        ),
+      ],
+    );
+  }
+
+  void _searchLocation() async {
+    if (_enteredLocation.isNotEmpty) {
+      List<Location> locations =
+          await locationFromAddress(_enteredLocation);
+      if (locations.isNotEmpty) {
+        _controller.animateCamera(
+          CameraUpdate.newLatLng(
+            LatLng(locations[0].latitude, locations[0].longitude),
+          ),
+        );
+      } else {
+        print('Ubicación no encontrada');
+      }
+    }
   }
 }

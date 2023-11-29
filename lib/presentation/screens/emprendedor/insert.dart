@@ -13,7 +13,7 @@ class CreateProduct extends StatefulWidget {
 }
 
 class CreateProductState extends State<CreateProduct> {
-  List<String> Categories = ['comida', 'ropa', 'accesorios'];
+  List<String> Categories = ['Comida', 'Ropa', 'Accesorios'];
   TextEditingController name = TextEditingController();
   TextEditingController precio = TextEditingController();
   TextEditingController link = TextEditingController();
@@ -105,7 +105,7 @@ class CreateProductState extends State<CreateProduct> {
                     child: Text(value),
                   );
                 }).toList(),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Seleccione la Categoría',
                 ),
               ),
@@ -222,6 +222,7 @@ class CreateProductState extends State<CreateProduct> {
         setState(() {
           isLoading = !isLoading;
         });
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (context) {

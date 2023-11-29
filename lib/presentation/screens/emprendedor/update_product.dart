@@ -20,15 +20,19 @@ class _UpdateRecordState extends State<UpdateRecord> {
   TextEditingController contacCategory = new TextEditingController();
   TextEditingController contacLink = new TextEditingController();
   TextEditingController contactDescription = TextEditingController();
+  List<String> Categories = ['Comida', 'Ropa', 'Accesorios'];
+
+  String? selectedCategory;
   var url;
   var url1;
   File? file;
   ImagePicker image = ImagePicker();
   DatabaseReference? db_Ref;
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
+    selectedCategory;
     db_Ref = FirebaseDatabase.instance.ref().child('contacts');
     Contactt_data();
   }
@@ -52,7 +56,7 @@ class _UpdateRecordState extends State<UpdateRecord> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Record'),
+        title: const Text('Actualizar Producto'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -87,7 +91,7 @@ class _UpdateRecordState extends State<UpdateRecord> {
                       ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             _FormField(
@@ -106,32 +110,46 @@ class _UpdateRecordState extends State<UpdateRecord> {
             const SizedBox(
               height: 5,
             ),
-            _FormField(
-                label: 'Categoria',
-                name: contacCategory,
-                filled: true,
-                hinText: 'Categoria'),
+            Padding(
+              padding: const EdgeInsets.all(13),
+              child: DropdownButtonFormField<String>(
+                  value: contacCategory.text,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCategory = newValue;
+                    });
+                  },
+                  items: Categories.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  decoration: InputDecoration(
+                    hintText: contacCategory.text,
+                  ),
+                ),
+            ),
             const SizedBox(
               height: 5,
             ),
             _FormField(
-                label: 'Link de WhatsApp',
+                label: 'Numero de WhatsApp',
                 name: contacLink,
                 filled: true,
                 hinText: 'Link de WhatsApp'),
-                  const SizedBox(
+            const SizedBox(
               height: 5,
             ),
-             _FormField(
+            _FormField(
                 label: 'Descripcion',
                 name: contactDescription,
                 filled: true,
                 hinText: 'Descripcion del producto'),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            MaterialButton(
-              height: 40,
+            ElevatedButton(
               onPressed: () {
                 // getImage();
 
@@ -141,14 +159,17 @@ class _UpdateRecordState extends State<UpdateRecord> {
                   directupdate();
                 }
               },
-              child: Text(
-                "Update",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
-                  fontSize: 20,
-                ),
-              ),
-              color: Colors.indigo[900],
+              child: isLoading
+                  ? const CircularProgressIndicator(
+                      color: Colors.white,
+                    )
+                  : const Text(
+                      "Actualizar",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 20,
+                      ),
+                    ),
             ),
           ],
         ),
@@ -167,6 +188,9 @@ class _UpdateRecordState extends State<UpdateRecord> {
   }
 
   uploadFile() async {
+    setState(() {
+      isLoading = !isLoading;
+    });
     try {
       var imagefile = FirebaseStorage.instance
           .ref()
@@ -181,8 +205,11 @@ class _UpdateRecordState extends State<UpdateRecord> {
       if (url1 != null) {
         Map<String, String> Contact = {
           'name': contactName.text,
-          'number': contacPrice.text,
+          'price': contacPrice.text,
           'url': url1,
+          'link': contacLink.text,
+          'category': selectedCategory == null ? contacCategory.text : selectedCategory!,
+          'description': contactDescription.text
         };
 
         db_Ref!.child(widget.Contact_Key).update(Contact).whenComplete(() {
@@ -200,22 +227,41 @@ class _UpdateRecordState extends State<UpdateRecord> {
   }
 
   directupdate() {
+    setState(() {
+      isLoading = !isLoading;
+    });
     if (url != null) {
       Map<String, String> Contact = {
         'name': contactName.text,
         'price': contacPrice.text,
-        'category': contacCategory.text,
+        'category': selectedCategory == null ? contacCategory.text : selectedCategory!,
         'link': contacLink.text,
         'url': url,
-        'description' : contactDescription.text
+        'description': contactDescription.text
       };
 
       db_Ref!.child(widget.Contact_Key).update(Contact).whenComplete(() {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => Home(),
-          ),
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Producto Actualizado'),
+              content: const Text('El producto se ha actualizado con éxito.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => Home(),
+                      ),
+                    ); // Cerrar el cuadro de diálogo
+                  },
+                  child: const Text('Aceptar'),
+                ),
+              ],
+            );
+          },
         );
       });
     }
